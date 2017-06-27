@@ -22,7 +22,7 @@ namespace Nop.Plugin.Payments.GTPay
                     result = "826";
                     break;
                 default:
-                    result = "566";
+                    result = "566"; //Nigerian Naira
                     break;
             }
 
@@ -32,11 +32,17 @@ namespace Nop.Plugin.Payments.GTPay
         public static string GetGTPayTransactionRequestUrl()
         {
             return "https://ibank.gtbank.com/GTPay/Tranx.aspx";
+            //return "https://gtweb.gtbank.com/orangelocker/gtpaym/tranx.aspx";
         }
 
         public static string GetGTPayTestMerchantIdentifier()
         {
-            return "GT-Merchant";
+            return "17";
+        }
+
+        public static string GetTestGTPayTransactionRequestUrl()
+        {
+            return "https://ibank.gtbank.com/gtpay/test/testmerchant.aspx";
         }
     }
 }

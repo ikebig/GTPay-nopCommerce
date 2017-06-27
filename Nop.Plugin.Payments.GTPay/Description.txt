@@ -2,7 +2,7 @@
 FriendlyName: GTPay
 SystemName: Payments.GTPay
 Version: 0.1
-SupportedVersions: 3.80
+SupportedVersions: 3.90
 Author: Konweh Ikechukwu
 DisplayOrder: 1
 FileName: Nop.Plugin.Payments.GTPay.dll

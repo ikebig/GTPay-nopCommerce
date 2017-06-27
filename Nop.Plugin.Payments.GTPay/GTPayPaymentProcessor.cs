@@ -35,6 +35,7 @@ namespace Nop.Plugin.Payments.GTPay
         private readonly IWebHelper _webHelper;
         private readonly IOrderTotalCalculationService _orderTotalCalculationService;
         private readonly IStoreContext _storeContext;
+        private readonly ILocalizationService _localizationService;
 
         #endregion
 
@@ -46,7 +47,8 @@ namespace Nop.Plugin.Payments.GTPay
             ICurrencyService currencyService, ICustomerService customerService,
             CurrencySettings currencySettings, IWebHelper webHelper,
             IOrderTotalCalculationService orderTotalCalculationService,
-            IStoreContext storeContext)
+            IStoreContext storeContext,
+            ILocalizationService localizationService)
         {
             this._gtPayPaymentSettings = gtPayPaymentSettings;
             this._settingService = settingService;
@@ -57,6 +59,7 @@ namespace Nop.Plugin.Payments.GTPay
             this._webHelper = webHelper;
             this._orderTotalCalculationService = orderTotalCalculationService;
             this._storeContext = storeContext;
+            this._localizationService = localizationService;
         }
 
         #endregion
@@ -233,9 +236,10 @@ namespace Nop.Plugin.Payments.GTPay
         {
             //settings
             var settings = new GTPayPaymentSettings
-            {
+            { 
                 UseSandbox = true,
                 DescriptionText = "<p><b>GTPAY accepts both locally and internationally issued cards including Interswitch, MasterCard and VISA.</b><br /></p>",
+                ShowCustomerName = true
             };
             _settingService.SaveSetting(settings);
 
@@ -243,6 +247,8 @@ namespace Nop.Plugin.Payments.GTPay
             this.AddOrUpdatePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_DescriptionText, "Description");
             this.AddOrUpdatePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_DescriptionText_Hint, "Enter info that will be shown to customers during checkout");
             this.AddOrUpdatePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_DescriptionText_Required, "Description is required.");
+            this.AddOrUpdatePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_SkipPaymentInfo, "Skip payment info");
+            this.AddOrUpdatePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_SkipPaymentInfo_Hint, "Gets a value indicating whether we should display a payment information page for this plugin.");
             this.AddOrUpdatePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_UseSandbox, "Use sandbox");
             this.AddOrUpdatePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_UseSandbox_Hint, "Check to enable Sandbox (testing environment).");
             this.AddOrUpdatePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_MerchantId, "Merchant identifier");
@@ -270,6 +276,8 @@ namespace Nop.Plugin.Payments.GTPay
             this.DeletePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_DescriptionText);
             this.DeletePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_DescriptionText_Hint);
             this.DeletePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_DescriptionText_Required);
+            this.DeletePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_SkipPaymentInfo);
+            this.DeletePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_SkipPaymentInfo_Hint);
             this.DeletePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_UseSandbox);
             this.DeletePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_UseSandbox_Hint);
             this.DeletePluginLocaleResource(Constants.LocaleResources.GTPay_Fields_MerchantId);
@@ -365,8 +373,18 @@ namespace Nop.Plugin.Payments.GTPay
         {
             get
             {
-                return false;
+                return _gtPayPaymentSettings.SkipPaymentInfo;
             }
+        }
+
+        /// <summary>
+        /// Gets a payment method description that will be displayed on checkout pages in the public store
+        /// </summary>
+        public string PaymentMethodDescription
+        {
+            //return description of this payment method to be display on "payment method" checkout step. good practice is to make it localizable
+            //for example, for a redirection payment method, description may be like this: "You will be redirected to GTPay site to complete the payment"
+            get { return _localizationService.GetResource("Plugins.Payments.GTPay.PaymentMethod.Description"); }
         }
 
         #endregion

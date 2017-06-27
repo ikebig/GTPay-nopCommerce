@@ -1,10 +1,13 @@
-﻿using Nop.Web.Framework;
+﻿using FluentValidation.Attributes;
+using Nop.Plugin.Payments.GTPay.Validators;
+using Nop.Web.Framework;
 using Nop.Web.Framework.Mvc;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Nop.Plugin.Payments.GTPay.Models
 {
+    [Validator(typeof(ConfigurationValidator))]
     public class ConfigurationModel : BaseNopModel
     {
         public ConfigurationModel()
@@ -12,6 +15,10 @@ namespace Nop.Plugin.Payments.GTPay.Models
             AvailableGateways = new List<SelectListItem>();
         }
         public int ActiveStoreScopeConfiguration { get; set; }
+
+        [NopResourceDisplayName(Constants.LocaleResources.GTPay_Fields_SkipPaymentInfo)]
+        public bool SkipPaymentInfo { get; set; }
+        public bool SkipPaymentInfo_OverrideForStore { get; set; }
 
         [AllowHtml]
         [NopResourceDisplayName(Constants.LocaleResources.GTPay_Fields_DescriptionText)]

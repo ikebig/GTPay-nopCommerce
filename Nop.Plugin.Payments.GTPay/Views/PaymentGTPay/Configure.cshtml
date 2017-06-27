@@ -13,11 +13,22 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#@Html.FieldIdFor(model => model.SkipPaymentInfo)").click(toggleSkipPaymentInfo);
             $("#@Html.FieldIdFor(model => model.UseSandbox)").click(toggleUseSandbox);
             $("#@Html.FieldIdFor(model => model.ShowGTPayPage)").click(toggleShowGTPayPage);
+            toggleSkipPaymentInfo();
             toggleUseSandbox();
             toggleShowGTPayPage();
         });
+
+        function toggleSkipPaymentInfo() {
+            if ($('#@Html.FieldIdFor(model => model.SkipPaymentInfo)').is(':checked')) {
+                $('#pnlDescriptionText').hide();
+            }
+            else {
+                $('#pnlDescriptionText').show();
+            }
+        }
 
         function toggleShowGTPayPage() {
             if ($('#@Html.FieldIdFor(model => model.ShowGTPayPage)').is(':checked')) {
@@ -50,6 +61,16 @@
                     <br />
                 </p>
                 <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.OverrideStoreCheckboxFor(model => model.SkipPaymentInfo_OverrideForStore, model => model.SkipPaymentInfo, Model.ActiveStoreScopeConfiguration)
+                        @Html.NopLabelFor(model => model.SkipPaymentInfo)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.SkipPaymentInfo)
+                        @Html.ValidationMessageFor(model => model.SkipPaymentInfo)
+                    </div>
+                </div>
+                <div id="pnlDescriptionText" class="form-group">
                     <div class="col-md-3">
                         @Html.OverrideStoreCheckboxFor(model => model.DescriptionText_OverrideForStore, model => model.DescriptionText, Model.ActiveStoreScopeConfiguration)
                         @Html.NopLabelFor(model => model.DescriptionText)

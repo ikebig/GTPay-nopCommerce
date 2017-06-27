@@ -10,7 +10,8 @@ namespace Nop.Plugin.Payments.GTPay.Validators
         public ConfigurationValidator(ILocalizationService localizationService)
         {
             RuleFor(x => x.DescriptionText).NotEmpty()
-               .WithMessage(localizationService.GetResource(Constants.LocaleResources.GTPay_Fields_DescriptionText_Required));
+                .When(x => !x.SkipPaymentInfo)
+                .WithMessage(localizationService.GetResource(Constants.LocaleResources.GTPay_Fields_DescriptionText_Required));
             RuleFor(x => x.MerchantId).NotEmpty()
                 .When(x => !x.UseSandbox)
                 .WithMessage(localizationService.GetResource(Constants.LocaleResources.GTPay_Fields_MerchantId_Required));
